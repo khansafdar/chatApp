@@ -9,6 +9,7 @@ const server=http.createServer(app)
 const io=socketio(server)
 
 app.use(express.json())
+app.use('/',express.static(__dirname +'/public'))
 app.use(express.urlencoded({extended:true}))
 const SERVER_PORT=process.env.PORT || 8888
 let idUserMap={}
@@ -30,7 +31,7 @@ io.on('connection',(socket)=>{
             })
         }else{
             console.log(data);
-            socket.broadcast.emit('chat_rcvd',{
+            io.emit('chat_rcvd',{
             username:data.username,
             msg:data.msg
         })
@@ -41,7 +42,7 @@ io.on('connection',(socket)=>{
 })
 app.use('/login', (require('./routes/login').route))
 app.use('/signup', (require('./routes/signup').route))
-app.use('/',express.static(__dirname +'/public'))
+
 
 db.sync()
 .then(()=>{
