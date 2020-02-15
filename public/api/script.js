@@ -31,11 +31,13 @@ $(()=>{
         $('#chatbox').show()
     })
     $('#send').click(()=>{
+
         console.log('Sending chat')
         socket.emit('chat',{
             msg:$('#msg').val(),
             username:username
         })
+        $('#msg').val()="";
     })
     socket.on('chat_rcvd',(data)=>{
         $('#chats').append(
